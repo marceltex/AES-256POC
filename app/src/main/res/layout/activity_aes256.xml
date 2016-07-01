@@ -10,7 +10,7 @@
     tools:context=".AES256Activity">
 
     <Button
-        android:id="@+id/select_file_button"
+        android:id="@+id/button_select_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
