@@ -11,3 +11,7 @@ An Android POC to prove that a file can be encrypted using AES 256 encryption wi
 **Gradle used to build app:** Gradle 2.1.2
 
 **Java version used:** Java 8 update 92
+
+## External libraries used
+
+* **Spongy Catle Encrytion Library** - https://search.maven.org/remote_content?g=com.madgag.spongycastle&a=core&v=LATEST
