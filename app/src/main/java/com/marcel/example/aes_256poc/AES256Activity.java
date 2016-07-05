@@ -50,6 +50,25 @@ public class AES256Activity extends AppCompatActivity {
                 startActivityForResult(intent, READ_REQUEST_CODE);
             }
         });
+
+        try {
+            InputStream inputStream = getResources().getAssets().open("file.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            inputStream.close();
+            reader.close();
+
+            String data = stringBuilder.toString();
+            debugInfoTextView.setText(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -58,10 +77,10 @@ public class AES256Activity extends AppCompatActivity {
             Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
-                Log.e(TAG, "Uri: " + uri.toString());
+                Log.i(TAG, "Uri: " + uri.toString());
                 try {
                     String data = readTextFromUri(uri);
-                    Log.e(TAG, "Data: " + data);
+                    debugInfoTextView.setText(data);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
