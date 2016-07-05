@@ -12,6 +12,6 @@ An Android POC to prove that a file can be encrypted using AES 256 encryption wi
 
 **Java version used:** Java 8 update 92
 
-## External libraries used
+## External Libraries Used:
 
-* **Spongy Catle Encrytion Library** - https://search.maven.org/remote_content?g=com.madgag.spongycastle&a=core&v=LATEST
+**Spongy Catle Encrytion Library** - https://search.maven.org/remote_content?g=com.madgag.spongycastle&a=core&v=LATEST
