@@ -53,18 +53,8 @@ public class AES256Activity extends AppCompatActivity {
 
         try {
             InputStream inputStream = getResources().getAssets().open("file.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
 
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-            inputStream.close();
-            reader.close();
-
-            String data = stringBuilder.toString();
+            String data = readTextFromInputStream(inputStream);
             debugInfoTextView.setText(data);
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,7 +69,9 @@ public class AES256Activity extends AppCompatActivity {
                 uri = resultData.getData();
                 Log.i(TAG, "Uri: " + uri.toString());
                 try {
-                    String data = readTextFromUri(uri);
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+
+                    String data = readTextFromInputStream(inputStream);
                     debugInfoTextView.setText(data);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -89,12 +81,11 @@ public class AES256Activity extends AppCompatActivity {
     }
 
     /**
-     * Method to return a string representation of the selected file
-     * @param uri URI of the file selected
-     * @return String representation of the selected file
+     * Method to return a string representation of a file
+     * @param inputStream Input Stream of the file
+     * @return String representation of the file
      */
-    private String readTextFromUri(Uri uri) throws IOException {
-        InputStream inputStream = getContentResolver().openInputStream(uri);
+    private String readTextFromInputStream(InputStream inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
