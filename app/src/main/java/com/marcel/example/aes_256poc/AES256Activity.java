@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,16 +20,20 @@ public class AES256Activity extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
     private static final String TAG = "AES256_Activity";
 
-    Button selectFileBtn;
+    private Button selectFileButton;
+
+    private TextView debugInfoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aes256);
 
-        selectFileBtn = (Button) findViewById(R.id.button_select_file);
+        selectFileButton = (Button) findViewById(R.id.button_select_file);
 
-        selectFileBtn.setOnClickListener(new View.OnClickListener() {
+        debugInfoTextView = (TextView) findViewById(R.id.text_view_debug_info);
+
+        selectFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
