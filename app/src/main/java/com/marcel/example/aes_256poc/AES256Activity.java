@@ -14,11 +14,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 public class AES256Activity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
     private static final String TAG = "AES256_Activity";
+
+    private String data; // String representation of file
 
     private Button selectFileButton;
 
@@ -54,11 +60,14 @@ public class AES256Activity extends AppCompatActivity {
         try {
             InputStream inputStream = getResources().getAssets().open("file.txt");
 
-            String data = readTextFromInputStream(inputStream);
-            debugInfoTextView.setText(data);
+            data = readTextFromInputStream(inputStream);
+            debugInfoTextView.setText("Original file: " + data);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Generate session key for AES 256 encryption
+        SecretKey sessionKey = generateAESSessionKey();
     }
 
     @Override
@@ -71,8 +80,8 @@ public class AES256Activity extends AppCompatActivity {
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
 
-                    String data = readTextFromInputStream(inputStream);
-                    debugInfoTextView.setText(data);
+                    data = readTextFromInputStream(inputStream);
+                    debugInfoTextView.setText("Original file: " + data);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,6 +91,7 @@ public class AES256Activity extends AppCompatActivity {
 
     /**
      * Method to return a string representation of a file
+     *
      * @param inputStream Input Stream of the file
      * @return String representation of the file
      */
@@ -95,5 +105,15 @@ public class AES256Activity extends AppCompatActivity {
         inputStream.close();
         reader.close();
         return stringBuilder.toString();
+    }
+
+    private SecretKey generateAESSessionKey() {
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(128);
+            return keyGen.generateKey();
+        } catch (NoSuchAlgorithmException n) {
+            return null;
+        }
     }
 }
