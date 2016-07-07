@@ -118,6 +118,11 @@ public class AES256Activity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
+    /**
+     * Method to generate and return a session key to use for AES encryption.
+     *
+     * @return SecretKey session key that will be used for AES encryption
+     */
     private SecretKey generateAESSessionKey() {
         KeyGenerator keyGen = null;
         try {
@@ -129,6 +134,12 @@ public class AES256Activity extends AppCompatActivity {
         return keyGen.generateKey();
     }
 
+    /**
+     *
+     * @param sessionKey Session key to be used for AES encryption
+     * @param buffer Binary representation of the file to be encrypted
+     * @return Encrypted file as a byte array
+     */
     private byte[] encryptFile(SecretKey sessionKey, byte[] buffer) throws Exception {
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
