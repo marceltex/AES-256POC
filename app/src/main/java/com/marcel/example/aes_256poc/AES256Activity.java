@@ -135,10 +135,12 @@ public class AES256Activity extends AppCompatActivity {
     }
 
     /**
+     * Method used to encrypt file.
      *
      * @param sessionKey Session key to be used for AES encryption
      * @param buffer Binary representation of the file to be encrypted
      * @return Encrypted file as a byte array
+     * @throws Exception Throws exception if algorithm for cipher not found
      */
     private byte[] encryptFile(SecretKey sessionKey, byte[] buffer) throws Exception {
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
