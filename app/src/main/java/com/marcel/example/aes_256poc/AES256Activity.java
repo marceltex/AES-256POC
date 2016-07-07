@@ -15,16 +15,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.Security;
 
+import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 public class AES256Activity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE = 42;
-    private static final String TAG = "AES256_Activity";
+    private static final String TAG = "AES256Activity";
 
     private String data; // String representation of file
+
+    private static byte[] iv; // Initialisation vector
 
     private Button selectFileButton;
 
@@ -62,12 +68,17 @@ public class AES256Activity extends AppCompatActivity {
 
             data = readTextFromInputStream(inputStream);
             debugInfoTextView.setText("Original file: " + data);
-        } catch (IOException e) {
+
+            // Generate session key for AES 256 encryption
+            SecretKey sessionKey = generateAESSessionKey();
+            debugInfoTextView.setText(debugInfoTextView.getText() + "\n\nSecret key generated successfully!");
+
+            // Encrypt file using AES 256 encryption and generated session key
+            byte[] encryptedFile = encryptFile(sessionKey, data.getBytes());
+            debugInfoTextView.setText(debugInfoTextView.getText() + "\n\nEncrypted file: " + new String(encryptedFile, "UTF-8"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Generate session key for AES 256 encryption
-        SecretKey sessionKey = generateAESSessionKey();
     }
 
     @Override
@@ -108,12 +119,25 @@ public class AES256Activity extends AppCompatActivity {
     }
 
     private SecretKey generateAESSessionKey() {
+        KeyGenerator keyGen = null;
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(128);
-            return keyGen.generateKey();
-        } catch (NoSuchAlgorithmException n) {
-            return null;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
+        return keyGen.generateKey();
+    }
+
+    private byte[] encryptFile(SecretKey sessionKey, byte[] buffer) throws Exception {
+        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+        SecureRandom randomSecureRandom = SecureRandom.getInstance("SHA1PRNG");
+        iv = new byte[cipher.getBlockSize()];
+        randomSecureRandom.nextBytes(iv);
+        IvParameterSpec ivParams = new IvParameterSpec(iv);
+        cipher.init(Cipher.ENCRYPT_MODE, sessionKey, ivParams);
+        byte[] encrypted = cipher.doFinal(buffer);
+        return encrypted;
     }
 }
