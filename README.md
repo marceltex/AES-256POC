@@ -2,7 +2,7 @@
 
 An Android POC to prove that a file can be encrypted using AES 256 encryption with a key generated on the device during runtime.
 
-**Minimum Android version required:** Android 4.0.3 (Ice Cream Sandwich) (API 15)
+**Minimum Android version required:** Android 4.4 (KitKat) (API 19)
 
 **IDE used for evelopment:** Android Studio 2.1.2
 
